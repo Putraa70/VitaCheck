@@ -9,12 +9,14 @@ class HasilTes extends Model
 {
     use HasUuids;
 
-    public $incrementing = false;
-    protected $keyType = 'string';
-
     protected $table = 'hasil_tes';
 
-    protected $fillable = ['pemesanan_id', 'status_hasil', 'catatan', 'berkas_hasil'];
+    protected $fillable = [
+        'pemesanan_id',
+        'status_hasil',  // enum: menunggu, negatif, positif, normal, abnormal
+        'catatan',
+        'berkas_hasil',
+    ];
 
     public function pemesanan()
     {
