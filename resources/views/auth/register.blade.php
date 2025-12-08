@@ -1,84 +1,129 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register | VitaCheck</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50% }
-            50% { background-position: 100% 50% }
-            100% { background-position: 0% 50% }
-        }
-    </style>
+  <title>Daftar Akun | VitaCheck Unila</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    <div class="min-h-screen flex items-center justify-center"
-         style="background: linear-gradient(135deg, rgb(139,47,237) 0%, #2575FC 50%, #FF6B6B 100%);
-                background-size: 400% 400%; animation: gradientAnimation 6s ease infinite;">
 
-        <div class="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-xl p-8">
-            <h2 class="text-center text-2xl font-bold text-white">Daftar Akun VitaCheck</h2>
+<body class="min-h-screen bg-slate-100 antialiased">
 
-            <form method="POST" action="{{ route('register') }}" class="mt-6">
-                @csrf
+  <!-- WRAPPER 2 KOLOM -->
+  <div class="grid lg:grid-cols-2 min-h-screen">
 
-                {{-- Name --}}
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-white">Nama Lengkap</label>
-                    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
-                           autocomplete="name"
-                           class="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 outline-none
-                                  focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 transition">
-                    @error('name') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
-                </div>
+    <!-- ========================= -->
+    <!-- KOLOM KIRI — FORM REGISTER -->
+    <!-- ========================= -->
+    <div class="flex items-center justify-center p-8 lg:p-16">
 
-                {{-- Email --}}
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-white">Email</label>
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                           autocomplete="username"
-                           class="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 outline-none
-                                  focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 transition">
-                    @error('email') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
-                </div>
+      <!-- Card Form -->
+      <main class="w-full max-w-md bg-white/70 backdrop-blur-xl border border-white/40 shadow-2xl rounded-3xl p-8 lg:p-10">
 
-                {{-- Password --}}
-                <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-white">Password</label>
-                    <input id="password" type="password" name="password" required autocomplete="new-password"
-                           class="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 outline-none
-                                  focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 transition">
-                    @error('password') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
-                </div>
-
-                {{-- Confirm Password --}}
-                <div class="mb-4">
-                    <label for="password_confirmation" class="block text-sm font-medium text-white">Konfirmasi Password</label>
-                    <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
-                           class="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 outline-none
-                                  focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 transition">
-                    @error('password_confirmation') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
-                </div>
-
-                {{-- Tombol Register --}}
-                <button type="submit"
-                        class="mt-6 w-full rounded-lg py-3 font-semibold text-white
-                               transition transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
-                        style="background: linear-gradient(to right, #6a11cb, #2575fc);">
-                    Daftar
-                </button>
-            </form>
-
-            <p class="mt-6 text-center text-sm text-white">
-                Sudah punya akun?
-                <a href="{{ route('login') }}" class="font-semibold text-indigo-200 hover:text-indigo-100">
-                    Login di sini
-                </a>
-            </p>
+        <!-- Header -->
+        <div class="text-center mb-6">
+          <h1 class="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-blue-600 text-transparent bg-clip-text">
+            Buat Akun Baru
+          </h1>
+          <p class="text-sm text-slate-600 mt-1">Lengkapi data Anda untuk mendaftar</p>
         </div>
+
+        {{-- Alerts --}}
+        @if ($errors->any())
+          <div class="mb-4 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 p-3 text-sm">
+            <ul class="list-disc ml-4">
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
+
+        <!-- FORM -->
+        <form method="POST" action="{{ route('register') }}" class="space-y-5" novalidate>
+          @csrf
+
+          <!-- Nama -->
+          <div>
+            <label class="text-sm font-semibold text-slate-700">Nama Lengkap</label>
+            <input type="text" name="name" value="{{ old('name') }}" required
+              class="mt-1 w-full px-4 py-3 rounded-xl border border-slate-300 bg-white shadow-sm 
+                     focus:ring-4 focus:ring-indigo-200 focus:border-indigo-600 outline-none"
+              placeholder="Nama lengkap">
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="text-sm font-semibold text-slate-700">Email</label>
+            <input type="email" name="email" value="{{ old('email') }}" required
+              class="mt-1 w-full px-4 py-3 rounded-xl border border-slate-300 bg-white shadow-sm 
+                     focus:ring-4 focus:ring-indigo-200 focus:border-indigo-600 outline-none"
+              placeholder="nama@kampus.ac.id">
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label class="text-sm font-semibold text-slate-700">Password</label>
+            <input type="password" name="password" required
+              class="mt-1 w-full px-4 py-3 rounded-xl border border-slate-300 bg-white shadow-sm 
+                     focus:ring-4 focus:ring-indigo-200 focus:border-indigo-600 outline-none"
+              placeholder="••••••••">
+          </div>
+
+          <!-- Konfirmasi Password -->
+          <div>
+            <label class="text-sm font-semibold text-slate-700">Konfirmasi Password</label>
+            <input type="password" name="password_confirmation" required
+              class="mt-1 w-full px-4 py-3 rounded-xl border border-slate-300 bg-white shadow-sm 
+                     focus:ring-4 focus:ring-indigo-200 focus:border-indigo-600 outline-none"
+              placeholder="Ulangi password">
+          </div>
+
+          <!-- Tombol -->
+          <button type="submit"
+            class="w-full py-3 rounded-xl text-white font-semibold 
+                   bg-gradient-to-r from-indigo-500 to-blue-600 hover:opacity-95 
+                   shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+            Daftar
+          </button>
+
+          <!-- Login Link -->
+          <p class="text-center text-sm text-slate-700">
+            Sudah punya akun?
+            <a href="{{ route('login') }}" class="font-semibold text-indigo-600 hover:underline">
+              Masuk
+            </a>
+          </p>
+        </form>
+
+      </main>
     </div>
+
+    <!-- ========================= -->
+    <!-- KOLOM KANAN — GAMBAR BESAR -->
+    <!-- ========================= -->
+    <div class="relative hidden lg:block">
+
+      <!-- Background Image -->
+      <div class="absolute inset-0 bg-cover bg-center"
+        style="background-image: url('{{ asset('image/klinik.jpg') }}');
+               filter: brightness(0.92);">
+      </div>
+
+      <!-- Overlay Tipis -->
+      <div class="absolute inset-0 bg-black/10"></div>
+
+      <!-- Text di atas gambar -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-16 text-center drop-shadow-lg">
+        <h2 class="text-4xl font-extrabold">Bergabung dengan VitaCheck</h2>
+        <p class="mt-3 text-lg opacity-95">
+          Sistem kesehatan modern untuk pengalaman yang lebih baik.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
 </body>
 </html>
