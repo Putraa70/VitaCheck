@@ -18,12 +18,20 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = ['password', 'remember_token'];
     protected $casts = ['email_verified_at' => 'datetime'];
 
+    /** RELASI **/
     public function profilMahasiswa()
     {
         return $this->hasOne(ProfilMahasiswa::class, 'pengguna_id');
     }
+
     public function pemesanan()
     {
         return $this->hasMany(Pemesanan::class, 'pengguna_id');
+    }
+
+    /** CHECK ADMIN **/
+    public function isAdmin(): bool
+    {
+        return $this->peran === 'admin';
     }
 }

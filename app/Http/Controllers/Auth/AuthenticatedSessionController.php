@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +12,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Show login page.
      */
     public function create(): View
     {
@@ -21,28 +20,39 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Handle login request.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Validasi + autentikasi default Breeze
         $request->authenticate();
 
+        // Regenerate session agar aman
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // ============================
+        // 🎯 REDIRECT BERDASARKAN PERAN
+        // ============================
+        $user = $request->user();
+
+        if ($request->user()->peran === 'admin') {
+            return redirect()->route('admin.dasbor_admin'); // <- sesuai route:list kamu
+        }
+        return redirect()->route('dasbor'); // user
+
     }
 
     /**
-     * Destroy an authenticated session.
+     * Logout.
      */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // SELALU ke login
+        return redirect()->route('login')->with('sukses', 'Anda telah keluar.');
     }
 }

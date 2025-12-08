@@ -16,7 +16,7 @@
 </head>
 <body class="antialiased">
     <div class="min-h-screen flex items-center justify-center"
-         style="background: linear-gradient(135deg, rgb(139,47,237) 0%, #2575FC 50%, #FF6B6B 100%);
+        style="background: linear-gradient(135deg, rgb(139,47,237) 0%, #2575FC 50%, #FF6B6B 100%);
                 background-size: 400% 400%; animation: gradientAnimation 5s ease infinite;">
         {{ $slot }}
     </div>

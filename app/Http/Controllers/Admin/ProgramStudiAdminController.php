@@ -3,59 +3,112 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{ProgramStudi, Fakultas};
+use App\Models\ProgramStudi;
+use App\Models\Fakultas;
 use Illuminate\Http\Request;
 
 class ProgramStudiAdminController extends Controller
 {
-    public function index()
+    /**
+     * Tampilkan daftar program studi.
+     */
+    public function index(Request $request)
     {
-        $data = ProgramStudi::with('fakultas')->latest()->paginate(15);
-        return view('admin.program_studi.index', compact('data'));
+        $q = $request->query('q');
+
+        $items = ProgramStudi::query()
+            ->with('fakultas') // hindari N+1
+            ->when($q, function ($query) use ($q) {
+                // PostgreSQL => ILIKE; kalau MySQL, ganti jadi 'like'
+                return $query->where(function ($x) use ($q) {
+                    $x->where('nama', 'ILIKE', "%{$q}%")
+                        ->orWhere('kode', 'ILIKE', "%{$q}%")
+                        ->orWhereHas('fakultas', fn($y) => $y->where('nama', 'ILIKE', "%{$q}%"));
+                });
+            })
+            ->orderBy('nama')
+            ->paginate(12)
+            ->withQueryString();
+
+        return view('admin.program_studi.index', compact('items'));
     }
 
+    /**
+     * Form tambah program studi.
+     */
     public function create()
     {
-        $fakultas = Fakultas::pluck('nama', 'id');
+        $fakultas = Fakultas::orderBy('nama')->get(['id', 'nama']);
+
         return view('admin.program_studi.create', compact('fakultas'));
     }
 
+    /**
+     * Simpan program studi baru.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'fakultas_id' => 'required|exists:fakultas,id',
-            'kode' => 'required|unique:program_studi,kode',
-            'nama' => 'required|string|max:100',
+        $data = $request->validate([
+            'kode'        => ['required', 'string', 'max:20', 'unique:program_studi,kode'],
+            'nama'        => ['required', 'string', 'max:150'],
+            'fakultas_id' => ['required', 'uuid', 'exists:fakultas,id'],
         ]);
-        ProgramStudi::create($request->all());
-        return redirect()->route('admin.program-studi.index')->with('sukses', 'Program studi ditambah.');
+
+        ProgramStudi::create($data);
+
+        return redirect()
+            ->route('admin.program-studi.index')
+            ->with('ok', 'Program studi berhasil ditambahkan.');
     }
 
-    public function show(ProgramStudi $program_studi)
+    /**
+     * Detail program studi.
+     */
+    public function show(ProgramStudi $programStudi)
     {
-        return view('admin.program_studi.show', compact('program_studi'));
+        $item = $programStudi->load('fakultas');
+
+        return view('admin.program_studi.show', compact('item'));
     }
 
-    public function edit(ProgramStudi $program_studi)
+    /**
+     * Form edit program studi.
+     */
+    public function edit(ProgramStudi $programStudi)
     {
-        $fakultas = Fakultas::pluck('nama', 'id');
-        return view('admin.program_studi.edit', compact('program_studi', 'fakultas'));
+        $item = $programStudi->load('fakultas');
+        $fakultas = Fakultas::orderBy('nama')->get(['id', 'nama']);
+
+        return view('admin.program_studi.edit', compact('item', 'fakultas'));
     }
 
-    public function update(Request $request, ProgramStudi $program_studi)
+    /**
+     * Update program studi.
+     */
+    public function update(Request $request, ProgramStudi $programStudi)
     {
-        $request->validate([
-            'fakultas_id' => 'required|exists:fakultas,id',
-            'kode' => 'required|unique:program_studi,kode,' . $program_studi->id,
-            'nama' => 'required|string|max:100',
+        $data = $request->validate([
+            'kode'        => ['required', 'string', 'max:20', 'unique:program_studi,kode,' . $programStudi->id . ',id'],
+            'nama'        => ['required', 'string', 'max:150'],
+            'fakultas_id' => ['required', 'uuid', 'exists:fakultas,id'],
         ]);
-        $program_studi->update($request->all());
-        return redirect()->route('admin.program-studi.index')->with('sukses', 'Program studi diperbarui.');
+
+        $programStudi->update($data);
+
+        return redirect()
+            ->route('admin.program-studi.index')
+            ->with('ok', 'Program studi berhasil diperbarui.');
     }
 
-    public function destroy(ProgramStudi $program_studi)
+    /**
+     * Hapus program studi.
+     */
+    public function destroy(ProgramStudi $programStudi)
     {
-        $program_studi->delete();
-        return back()->with('sukses', 'Program studi dihapus.');
+        $programStudi->delete();
+
+        return redirect()
+            ->route('admin.program-studi.index')
+            ->with('ok', 'Program studi berhasil dihapus.');
     }
 }

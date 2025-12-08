@@ -17,21 +17,14 @@ class SlotWaktu extends Model
         'mulai',
         'selesai',
         'kuota',
-        'terpesan'
+        'terpesan',
+        'dihold',
     ];
 
     protected $casts = [
-        // pastikan kolom 'tanggal' bertipe date/datetime di DB
-        'tanggal' => 'datetime',
-        // kalau mulai/selesai bertipe TIME di DB, biarkan string (default)
-        'kuota'    => 'integer',
-        'terpesan' => 'integer',
-    ];
-
-    // default supaya aman kalau null
-    protected $attributes = [
-        'kuota' => 0,
-        'terpesan' => 0,
+        'tanggal'    => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function jenisTes()
@@ -46,18 +39,10 @@ class SlotWaktu extends Model
 
     public function masihAdaKuota(): bool
     {
-        $kuota    = (int) ($this->kuota ?? 0);
-        $terpesan = (int) ($this->terpesan ?? 0);
-        // jika kuota = 0 artinya tidak dibatasi → anggap masih ada kuota
-        if ($kuota === 0) return true;
-        return $terpesan < $kuota;
-    }
+        $kuota     = (int) ($this->kuota ?? 0);
+        $terpesan  = (int) ($this->terpesan ?? 0);
+        $dihold    = (int) ($this->dihold ?? 0);
 
-    public function sisaKuota(): int
-    {
-        $kuota    = (int) ($this->kuota ?? 0);
-        $terpesan = (int) ($this->terpesan ?? 0);
-        if ($kuota === 0) return PHP_INT_MAX; // tak terbatas
-        return max($kuota - $terpesan, 0);
+        return $kuota > ($terpesan + $dihold);
     }
 }

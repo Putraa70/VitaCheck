@@ -3,23 +3,42 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? 'Masuk • VitaCheck' }}</title>
+    <title>{{ $title ?? 'VitaCheck Unila' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
-<body class="min-h-full grid place-items-center bg-gray-50">
-    <div class="w-full max-w-md p-8">
-        <div class="flex flex-col items-center gap-4 mb-6">
-            <a href="{{ url('/') }}"><x-application-logo class="h-12 w-12" /></a>
-            <h1 class="text-xl font-semibold">{{ $heading ?? 'VitaCheck Unila' }}</h1>
-            <p class="text-sm text-gray-500">{{ $subheading ?? 'Sistem pendaftaran cek kesehatan & tes narkoba' }}</p>
-        </div>
+<body class="min-h-full bg-gray-50 text-gray-900 antialiased">
+    {{-- Top Navigation --}}
+    {{-- @include('layouts.navigation') --}}
 
-        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6">
-            {{ $slot }}
-        </div>
+    {{-- Page Heading (optional) --}}
+    @isset($header)
+        <header class="bg-white/80 backdrop-blur border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                {{ $header }}
+            </div>
+        </header>
+    @endisset
 
-        <p class="text-xs text-center text-gray-500 mt-6">&copy; {{ date('Y') }} VitaCheck Unila</p>
-    </div>
+    {{-- Main --}}
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        {{-- Flash alerts --}}
+        @if(session('status'))
+            <div class="mb-6">
+                <x-auth-session-status :status="session('status')" />
+            </div>
+        @endif
+
+        {{ $slot ?? '' }}
+        @yield('content')
+    </main>
+
+    {{-- Footer --}}
+    <footer class="mt-12 border-t">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-gray-500 flex items-center justify-between">
+            <p>&copy; {{ date('Y') }} VitaCheck Unila — Klinik Unila</p>
+            <p class="hidden sm:block">Built with Laravel {{ app()->version() }}</p>
+        </div>
+    </footer>
 </body>
 </html>

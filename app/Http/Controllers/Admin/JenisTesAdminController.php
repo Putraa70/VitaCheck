@@ -3,46 +3,98 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SimpanJenisTesRequest;
 use App\Models\JenisTes;
+use Illuminate\Http\Request;
 
 class JenisTesAdminController extends Controller
 {
-    public function __construct()
+    public function index(Request $r)
     {
-        $this->middleware(['auth', 'can:admin']);
+        $q = $r->query('q');
+
+        $items = JenisTes::query()
+            ->when($q, function ($x) use ($q) {
+                $like = config('database.default') === 'pgsql' ? 'ILIKE' : 'LIKE';
+                $x->where('nama', $like, "%{$q}%")
+                    ->orWhere('kode', $like, "%{$q}%");
+            })
+            ->orderBy('nama')
+            ->paginate(15);
+
+        if ($r->query()) {
+            $items->appends($r->query());
+        }
+
+        return view('admin.jenis_tes.index', compact('items'));
     }
 
-    public function index()
-    {
-        $data = JenisTes::latest()->paginate(20);
-        return view('admin.jenis_tes.index', compact('data'));
-    }
     public function create()
     {
         return view('admin.jenis_tes.create');
     }
-    public function store(SimpanJenisTesRequest $r)
+
+    public function store(Request $request)
     {
-        JenisTes::create($r->validated());
-        return redirect()->route('admin.jenis-tes.index')->with('sukses', 'Jenis tes dibuat.');
+        $data = $request->validate([
+            'kode'      => ['nullable', 'string', 'max:50', 'unique:jenis_tes,kode'],
+            'nama'      => ['required', 'string', 'max:150', 'unique:jenis_tes,nama'],
+            'deskripsi' => ['nullable', 'string'],
+            'biaya'     => ['nullable', 'integer', 'min:0'],
+            'aktif'     => ['nullable', 'boolean'],
+        ]);
+
+        if (empty($data['kode'])) {
+            $data['kode'] = JenisTes::generateKode($data['nama']);
+        }
+
+        JenisTes::create($data);
+
+        return redirect()
+            ->route('admin.jenis-tes.index')
+            ->with('sukses', 'Jenis tes berhasil ditambahkan.');
     }
-    public function show(JenisTes $jenis_te)
+
+    public function show(JenisTes $jenisTes)
     {
-        return view('admin.jenis_tes.show', ['jenisTes' => $jenis_te]);
+        $item = $jenisTes;
+
+        return view('admin.jenis_tes.show', compact('item'));
     }
-    public function edit(JenisTes $jenis_te)
+
+    public function edit(JenisTes $jenisTes)
     {
-        return view('admin.jenis_tes.edit', ['jenisTes' => $jenis_te]);
+        $item = $jenisTes;
+
+        return view('admin.jenis_tes.edit', compact('item'));
     }
-    public function update(SimpanJenisTesRequest $r, JenisTes $jenis_te)
+
+    public function update(Request $request, JenisTes $jenisTes)
     {
-        $jenis_te->update($r->validated());
-        return redirect()->route('admin.jenis-tes.index')->with('sukses', 'Jenis tes diperbarui.');
+        $data = $request->validate([
+            'kode'      => ['nullable', 'string', 'max:50', 'unique:jenis_tes,kode,' . $jenisTes->id],
+            'nama'      => ['required', 'string', 'max:150', 'unique:jenis_tes,nama,' . $jenisTes->id],
+            'deskripsi' => ['nullable', 'string'],
+            'biaya'     => ['nullable', 'integer', 'min:0'],
+            'aktif'     => ['nullable', 'boolean'],
+        ]);
+
+        if (empty($data['kode'])) {
+            $data['kode'] = JenisTes::generateKode($data['nama']);
+        }
+
+        $jenisTes->update($data);
+
+        return redirect()
+            ->route('admin.jenis-tes.index')
+            ->with('sukses', 'Jenis tes berhasil diperbarui.');
     }
-    public function destroy(JenisTes $jenis_te)
+
+    public function destroy(JenisTes $jenisTes)
     {
-        $jenis_te->delete();
-        return back()->with('sukses', 'Jenis tes dihapus.');
+        $jenisTes->delete();
+
+        return redirect()
+            ->route('admin.jenis-tes.index')
+            ->with('sukses', 'Jenis tes dihapus.');
     }
 }

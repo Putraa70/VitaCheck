@@ -10,6 +10,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class,
+            FakultasSeeder::class,
+            ProgramStudiSeeder::class,
             // Tambahkan Faculty/Program/JenisTes/SlotWaktu seeder kalau perlu
         ]);
     }

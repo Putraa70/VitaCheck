@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Pemesanan;
 use App\Models\JenisTes;
@@ -8,8 +8,12 @@ use App\Models\SlotWaktu;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
-class DashboardController extends Controller
+
+
+
+class DasborAdminController extends Controller
 {
     public function index(Request $request)
     {
@@ -89,7 +93,7 @@ class DashboardController extends Controller
             $userKpi['terakhir'] = Pemesanan::where('pengguna_id', $user->id)->latest()->first();
         }
 
-        return view('dashboard', [
+        return view('admin.dashboard', [
             'isAdmin'        => $isAdmin,
             'totalPemesanan' => $totalPemesanan,
             'totalPengguna'  => $totalPengguna,

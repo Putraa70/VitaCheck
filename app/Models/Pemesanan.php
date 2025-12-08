@@ -9,16 +9,32 @@ class Pemesanan extends Model
 {
     use HasUuids;
 
-    public $incrementing = false;
-    protected $keyType = 'string';
-
-    // HAPUS baris $table kalau ada, atau pastikan:
     protected $table = 'pemesanans';
 
-    protected $fillable = ['kode', 'pengguna_id', 'jenis_tes_id', 'slot_waktu_id', 'status', 'dibayar_pada'];
-    protected $casts = ['dibayar_pada' => 'datetime'];
+    protected $fillable = [
+        'kode',
+        'pengguna_id',
+        'jenis_tes_id',
+        'slot_waktu_id',
+        'status',
+        'dibayar_pada',
+        'kedaluwarsa_pada',
+        'total_bayar',
+        'metode_bayar',
+        'nomor_antrian',
+        'waktu_tes',
+        'qr_checkin',
+    ];
 
-    public function pengguna()
+    protected $casts = [
+        'dibayar_pada'     => 'datetime',
+        'kedaluwarsa_pada' => 'datetime',
+        'waktu_tes'        => 'datetime',
+        'created_at'       => 'datetime',
+        'updated_at'       => 'datetime',
+    ];
+
+    public function user()
     {
         return $this->belongsTo(User::class, 'pengguna_id');
     }
@@ -30,11 +46,11 @@ class Pemesanan extends Model
     {
         return $this->belongsTo(SlotWaktu::class, 'slot_waktu_id');
     }
-    public function berkas()
+    public function berkasPemesanan()
     {
         return $this->hasMany(BerkasPemesanan::class, 'pemesanan_id');
     }
-    public function hasil()
+    public function hasilTes()
     {
         return $this->hasOne(HasilTes::class, 'pemesanan_id');
     }
