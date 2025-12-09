@@ -17,7 +17,7 @@
   {{-- Notifikasi Global --}}
   @if(session('sukses') || session('ok') || session('error'))
     @php
-      $msg = session('sukses') ?? session('ok') ?? session('error');
+      $msg   = session('sukses') ?? session('ok') ?? session('error');
       $isErr = session('error');
       $color = $isErr ? 'bg-rose-600 dark:bg-rose-700' : 'bg-emerald-600 dark:bg-emerald-700';
     @endphp
@@ -50,61 +50,94 @@
       </div>
 
       @php
-        function navClass($isActive){
-          return $isActive
-            ? 'bg-gradient-to-r from-indigo-50 to-violet-50 text-indigo-700 ring-1 ring-indigo-100 dark:from-indigo-900/30 dark:to-violet-900/20 dark:text-indigo-200 dark:ring-indigo-900'
-            : 'text-slate-700 hover:text-indigo-700 hover:bg-slate-50 ring-1 ring-transparent hover:ring-slate-100 dark:text-slate-300 dark:hover:text-indigo-200 dark:hover:bg-slate-800/60';
+        // Helper kelas nav (dibungkus function_exists biar tidak redeclare)
+        if (! function_exists('adminNavClass')) {
+          function adminNavClass($isActive){
+            return $isActive
+              ? 'bg-gradient-to-r from-indigo-50 to-violet-50 text-indigo-700 ring-1 ring-indigo-100 dark:from-indigo-900/30 dark:to-violet-900/20 dark:text-indigo-200 dark:ring-indigo-900'
+              : 'text-slate-700 hover:text-indigo-700 hover:bg-slate-50 ring-1 ring-transparent hover:ring-slate-100 dark:text-slate-300 dark:hover:text-indigo-200 dark:hover:bg-slate-800/60';
+          }
         }
       @endphp
 
-        <div class="mt-3 mb-1 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Admin</div>
+      <div class="mt-3 mb-1 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+        Admin
+      </div>
+
       <nav class="p-3 space-y-1 text-[0.94rem]">
         {{-- MENU: Admin Dashboard --}}
         <a href="{{ route('admin.dasbor_admin') }}"
-           class="block px-3 py-2 rounded-xl transition {{ navClass(request()->routeIs('admin.dasbor_admin')) }}">
+           class="block px-3 py-2 rounded-xl transition {{ adminNavClass(request()->routeIs('admin.dasbor_admin')) }}">
           <span class="inline-flex items-center gap-2">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m3 12 9-8 9 8M4 10v10a1 1 0 0 0 1 1h4m6 0h4a1 1 0 0 0 1-1V10M9 21v-6h6v6"/></svg>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m3 12 9-8 9 8M4 10v10a1 1 0 0 0 1 1h4m6 0h4a1 1 0 0 0 1-1V10M9 21v-6h6v6"/>
+            </svg>
             Dashboard
           </span>
         </a>
 
-
-        <a href="{{ route('admin.fakultas.index') }}"
-           class="block px-3 py-2 rounded-xl transition {{ navClass(request()->routeIs('admin.fakultas.*')) }}">
+        {{-- MENU: Kelola User --}}
+        <a href="{{ route('admin.users.index') }}"
+           class="block px-3 py-2 rounded-xl transition {{ adminNavClass(request()->routeIs('admin.users.*')) }}">
           <span class="inline-flex items-center gap-2">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18"/></svg>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20a3 3 0 1 0-6 0m9-9a4 4 0 1 0-8 0 4 4 0 0 0 8 0Zm-8.5 9a4.5 4.5 0 0 0-9 0M9 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z"/>
+            </svg>
+            Kelola User
+          </span>
+        </a>
+
+        {{-- MENU: Fakultas --}}
+        <a href="{{ route('admin.fakultas.index') }}"
+           class="block px-3 py-2 rounded-xl transition {{ adminNavClass(request()->routeIs('admin.fakultas.*')) }}">
+          <span class="inline-flex items-center gap-2">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18"/>
+            </svg>
             Fakultas
           </span>
         </a>
 
+        {{-- MENU: Program Studi --}}
         <a href="{{ route('admin.program-studi.index') }}"
-           class="block px-3 py-2 rounded-xl transition {{ navClass(request()->routeIs('admin.program-studi.*')) }}">
+           class="block px-3 py-2 rounded-xl transition {{ adminNavClass(request()->routeIs('admin.program-studi.*')) }}">
           <span class="inline-flex items-center gap-2">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+            </svg>
             Program Studi
           </span>
         </a>
 
+        {{-- MENU: Jenis Tes --}}
         <a href="{{ route('admin.jenis-tes.index') }}"
-           class="block px-3 py-2 rounded-xl transition {{ navClass(request()->routeIs('admin.jenis-tes.*')) }}">
+           class="block px-3 py-2 rounded-xl transition {{ adminNavClass(request()->routeIs('admin.jenis-tes.*')) }}">
           <span class="inline-flex items-center gap-2">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"/></svg>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"/>
+            </svg>
             Jenis Tes
           </span>
         </a>
 
+        {{-- MENU: Slot Waktu --}}
         <a href="{{ route('admin.slot-waktu.index') }}"
-           class="block px-3 py-2 rounded-xl transition {{ navClass(request()->routeIs('admin.slot-waktu.*')) }}">
+           class="block px-3 py-2 rounded-xl transition {{ adminNavClass(request()->routeIs('admin.slot-waktu.*')) }}">
           <span class="inline-flex items-center gap-2">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 0 0 2-2v-8H3v8a2 2 0 0 0 2 2z"/></svg>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 0 0 2-2v-8H3v8a2 2 0 0 0 2 2z"/>
+            </svg>
             Slot Waktu
           </span>
         </a>
 
+        {{-- MENU: Pemesanan --}}
         <a href="{{ route('admin.pemesanans.index') }}"
-           class="block px-3 py-2 rounded-xl transition {{ navClass(request()->routeIs('admin.pemesanans.*')) }}">
+           class="block px-3 py-2 rounded-xl transition {{ adminNavClass(request()->routeIs('admin.pemesanans.*')) }}">
           <span class="inline-flex items-center gap-2">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15V8a2 2 0 0 0-2-2h-3l-2-2h-4L8 6H5a2 2 0 0 0-2 2v7m2 4h14a2 2 0 0 0 2-2M3 17a2 2 0 0 0 2 2"/></svg>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 15V8a2 2 0 0 0-2-2h-3l-2-2h-4L8 6H5a2 2 0 0 0-2 2v7m2 4h14a2 2 0 0 0 2-2M3 17a2 2 0 0 0 2 2"/>
+            </svg>
             Pemesanan
           </span>
         </a>
@@ -124,7 +157,9 @@
       <header class="h-16 bg-white/90 backdrop-blur ring-1 ring-slate-200 dark:bg-slate-900/70 dark:ring-slate-800 flex items-center px-3 md:px-6 justify-between sticky top-0 z-30">
         <div class="flex items-center gap-2">
           <button id="btnSidebar" class="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-xl ring-1 ring-slate-200 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800" aria-label="Toggle Sidebar">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M3 12h18M3 18h18"/></svg>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M3 12h18M3 18h18"/>
+            </svg>
           </button>
           {{-- Judul topbar --}}
           <div class="font-semibold truncate">{{ $title ?? 'Admin · VitaCheck Unila' }}</div>
@@ -133,14 +168,18 @@
         <div class="flex items-center gap-2">
           {{-- Dark mode toggle --}}
           <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-xl ring-1 ring-slate-200 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800" aria-label="Toggle theme">
-            <svg id="iconSun" class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4V2m0 20v-2M4.93 4.93 3.52 3.52m16.96 16.96-1.41-1.41M4 12H2m20 0h-2M4.93 19.07 3.52 20.48m16.96-16.96-1.41 1.41M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg>
-            <svg id="iconMoon" class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg id="iconSun" class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4V2m0 20v-2M4.93 4.93 3.52 3.52m16.96 16.96-1.41-1.41M4 12H2m20 0h-2M4.93 19.07 3.52 20.48m16.96-16.96-1.41 1.41M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/>
+            </svg>
+            <svg id="iconMoon" class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
           </button>
 
-          <a href="{{ route('profile.edit') }}"
+          {{-- <a href="{{ route('profile.edit') }}"
              class="hidden sm:inline-flex px-3 py-2 rounded-xl ring-1 ring-slate-200 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium">
             Profil
-          </a>
+          </a> --}}
 
           <form method="POST" action="{{ route('logout') }}">
             @csrf
@@ -165,6 +204,7 @@
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       if(ls === 'dark' || (!ls && prefersDark)) document.documentElement.classList.add('dark');
     })();
+
     document.getElementById('themeToggle')?.addEventListener('click', ()=>{
       const el = document.documentElement;
       const isDark = el.classList.toggle('dark');

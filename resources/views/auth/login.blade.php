@@ -25,7 +25,6 @@
     <main class="w-full max-w-md bg-white/15 backdrop-blur-xl shadow-2xl border border-white/20 rounded-2xl">
       <!-- Header -->
       <div class="px-8 pt-8 pb-4 text-center">
-        <!-- (Opsional) Logo -->
         {{-- <img src="{{ asset('images/logo-vitacheck.svg') }}" alt="VitaCheck Logo" class="h-10 mx-auto mb-3"> --}}
         <h1 class="text-3xl font-bold tracking-tight text-white">
           <span class="text-indigo-200">Vita</span>Check <span class="opacity-90">Unila</span>
@@ -33,11 +32,17 @@
         <p class="mt-1 text-sm text-white/80">Silakan masuk untuk melanjutkan</p>
       </div>
 
-      <!-- Alerts -->
       <div class="px-8">
         @if (session('status'))
           <div class="mb-4 rounded-xl bg-emerald-50/80 text-emerald-800 ring-1 ring-emerald-200 px-4 py-3 text-sm">
             {{ session('status') }}
+          </div>
+        @endif
+
+        {{-- Pesan error khusus Google --}}
+        @if (session('error_google'))
+          <div class="mb-4 rounded-xl bg-rose-50/80 text-rose-800 ring-1 ring-rose-200 px-4 py-3 text-sm">
+            {{ session('error_google') }}
           </div>
         @endif
 
@@ -52,6 +57,7 @@
           </div>
         @endif
       </div>
+
 
       <!-- Form -->
       <form method="POST" action="{{ route('login') }}" novalidate
@@ -134,14 +140,24 @@
         </button>
 
         <!-- Divider -->
-        <div class="flex items-center gap-3 text-white/70">
+        <div class="flex items-center gap-3 text-white/70 mt-1">
           <div class="h-px flex-1 bg-white/30"></div>
           <span class="text-xs">atau</span>
           <div class="h-px flex-1 bg-white/30"></div>
         </div>
 
+        <!-- Tombol Login Google -->
+        <a href="{{ route('auth.google.redirect') }}"
+           class="w-full mt-2 inline-flex justify-center items-center gap-3 py-2.5 rounded-xl font-medium text-sm
+                  bg-white/80 backdrop-blur-sm text-slate-700 border border-white/40 shadow-md hover:bg-white
+                  hover:shadow-lg hover:-translate-y-0.5 transition">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+               alt="Google" class="w-5 h-5">
+          <span>Masuk dengan Google</span>
+        </a>
+
         <!-- Register -->
-        <p class="text-center text-white/85 text-sm">
+        <p class="text-center text-white/85 text-sm mt-4">
           Belum punya akun?
           <a href="{{ route('register') }}" class="font-semibold text-indigo-100 hover:text-white underline-offset-4 hover:underline">
             Daftar

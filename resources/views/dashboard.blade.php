@@ -101,27 +101,27 @@
                 {{-- CTA Buttons: Pesan Tes / Lihat Jadwal / Lengkapi Profil --}}
                 <div class="flex flex-wrap gap-3 sm:gap-4 items-center">
                     <a href="{{ route('pemesanan.buat') }}"
-                       class="inline-flex items-center justify-center px-6 sm:px-7 py-3 sm:py-3.5
-                              rounded-xl text-sm sm:text-[0.85rem] font-semibold tracking-wide
-                              text-white bg-gradient-to-r from-indigo-600 to-sky-600
-                              shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:brightness-110
-                              transition-transform duration-300 ease-out hover:-translate-y-0.5
-                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="inline-flex items-center justify-center px-6 sm:px-7 py-3 sm:py-3.5
+                            rounded-xl text-sm sm:text-[0.85rem] font-semibold tracking-wide
+                        text-white bg-gradient-to-r from-indigo-600 to-sky-600
+                            shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:brightness-110
+                            transition-transform duration-300 ease-out hover:-translate-y-0.5
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <svg class="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 5v14M5 12h14"/>
                         </svg>
                         <span>Pesan Tes</span>
                     </a>
 
                     <a href="{{ route('pemesanan.indeks') }}"
-                       class="inline-flex items-center justify-center px-5 sm:px-6 py-3 sm:py-3.5
-                              rounded-xl text-sm font-semibold text-indigo-700 bg-white/80
-                              border border-indigo-100 hover:bg-indigo-50
-                              transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md
-                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="inline-flex items-center justify-center px-5 sm:px-6 py-3 sm:py-3.5
+                            rounded-xl text-sm font-semibold text-indigo-700 bg-white/80
+                            border border-indigo-100 hover:bg-indigo-50
+                            transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <svg class="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="5" width="18" height="16" rx="2" />
                             <path d="M8 3v4M16 3v4M3 10h18" />
                         </svg>

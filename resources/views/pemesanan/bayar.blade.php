@@ -39,7 +39,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
-                            {{ optional($pesan->kedaluwarsa_pada)->translatedFormat('d M Y, H:i') }} WIB
+                            @if($pesan->kedaluwarsa_pada)
+                                {{ \Illuminate\Support\Carbon::parse($pesan->kedaluwarsa_pada)->translatedFormat('d M Y, H:i') }} WIB
+                            @else
+                                -
+                            @endif
                         </p>
                         <p class="text-xs text-gray-500">(Pastikan pop-up Midtrans tidak diblokir)</p>
                     </div>
@@ -80,7 +84,11 @@
 
                 <p class="text-gray-600">Jadwal Tes</p>
                 <p class="text-gray-800 font-semibold text-right">
-                    {{ optional($pesan->slotWaktu?->tanggal)->translatedFormat('l, d M Y') }}
+                    @if($pesan->slotWaktu?->tanggal)
+                        {{ \Illuminate\Support\Carbon::parse($pesan->slotWaktu->tanggal)->translatedFormat('l, d M Y') }}
+                    @else
+                        -
+                    @endif
                     ({{ optional($pesan->slotWaktu)->mulai }} - {{ optional($pesan->slotWaktu)->selesai }})
                 </p>
 
@@ -121,12 +129,8 @@
     const errBox = document.getElementById('snapError');
     const errSpan = errBox ? errBox.querySelector('span') : null;
 
-    // 🔴 DULU: redirect ke detail (tidak mengubah status)
-    // const redirectUrl = @json(route('pemesanan.lihat', $pesan->kode));
-
-    // ✅ SEKARANG: redirect ke route SUKSES yang mengubah status jadi "terbayar"
+    // redirect ke route SUKSES yang mengubah status jadi "terbayar"
     const redirectUrl = @json(route('pemesanan.sukses', ['order_id' => $pesan->kode]));
-
     const token = @json($snapToken);
 
     function showError(msg){
@@ -150,11 +154,10 @@
 
             window.snap.pay(token, {
                 onSuccess: function(){
-                    // ✅ Setelah bayar sukses → arahkan ke route sukses
                     window.location = redirectUrl;
                 },
                 onPending: function(){
-                    // ✅ Di DEV boleh dianggap sukses juga
+                    // DEV: pending dianggap sukses
                     window.location = redirectUrl;
                 },
                 onError: function(result){
@@ -169,7 +172,6 @@
                     btn.innerHTML = '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-9 5h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Bayar Sekarang';
                 },
                 onClose: function(){
-                    // Hanya reset tombol jika pengguna menutup pop-up tanpa error
                     btn.removeAttribute('disabled');
                     btn.innerHTML = '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-9 5h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Bayar Sekarang';
                 }
@@ -178,7 +180,7 @@
             console.error(e);
             showError('Gagal membuka popup pembayaran. Pastikan pop-up tidak diblokir.');
             btn.removeAttribute('disabled');
-            btn.innerHTML = '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-9 5h14a2 2 0 002-2V7a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Bayar Sekarang';
+            btn.innerHTML = '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-9 5h14a2 2 0 002-2V7a2 2 0 002 2z"/></svg> Bayar Sekarang';
         }
     });
 </script>

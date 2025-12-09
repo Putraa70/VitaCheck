@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Pemesanan;
 use App\Models\JenisTes;
 use App\Models\SlotWaktu;
+use App\Models\BerkasPemesanan;          // ⬅️ TAMBAH
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;   // ⬅️ TAMBAH
 use App\Services\AntrianService;
 
 class PemesananAdminController extends Controller
@@ -164,5 +166,23 @@ class PemesananAdminController extends Controller
         });
 
         return back()->with('sukses', 'Status pemesanan diperbarui.');
+    }
+
+    /**
+     * Tampilkan / download berkas pemesanan lewat Laravel (tanpa akses /storage langsung)
+     */
+    public function lihatBerkas(BerkasPemesanan $berkas)
+    {
+        $path = $berkas->lokasi_berkas;
+
+        if (! Storage::disk('public')->exists($path)) {
+            abort(404, 'Berkas tidak ditemukan.');
+        }
+
+        return response()->file(
+            Storage::disk('public')->path($path)
+        );
+        // kalau mau force download:
+        // return Storage::disk('public')->download($path);
     }
 }

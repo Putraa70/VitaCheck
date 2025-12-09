@@ -229,9 +229,9 @@
             @endif
           </div>
           <div class="flex gap-2">
-            <a href="{{ route('pemesanan.buat') }}"
+           <a href="{{ route('admin.slot-waktu.show',$s) }}"
                class="inline-flex items-center px-3 py-1.5 rounded-lg border border-white/25 bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 backdrop-blur">
-              Pesan
+              Lihat
             </a>
             <a href="{{ route('admin.slot-waktu.edit',$s) }}"
                class="inline-flex items-center px-3 py-1.5 rounded-lg border border-white/25 bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 backdrop-blur">

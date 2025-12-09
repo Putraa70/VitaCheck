@@ -1,66 +1,387 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## 🎯 Tentang Proyek
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**VitaCheck Unila** adalah platform digital terintegrasi untuk manajemen pemeriksaan kesehatan mahasiswa Universitas Lampung. Aplikasi ini memudahkan mahasiswa untuk:
 
-## About Laravel
+-   Melakukan pemesanan tes kesehatan secara online
+-   Memilih slot waktu yang sesuai jadwal
+-   Mengunggah dokumen persyaratan
+-   Melacak status pemesanan secara real-time
+-   Mengakses hasil tes dalam format digital
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Platform ini dirancang dengan fokus pada **user experience**, **keamanan data**, dan **integrasi dengan sistem klinik kampus**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🎓 Target Pengguna
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   **Mahasiswa Universitas Lampung** - Pengguna utama platform
+-   **Admin Klinik** - Mengelola jadwal, tes, dan hasil
+-   **Admin Universitas** - Monitoring keseluruhan sistem
+-   **Staf Klinik** - Input data hasil tes
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Fitur Utama
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 1. **Manajemen Akun Pengguna**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   ✅ Registrasi dengan validasi email kampus
+-   ✅ Login dengan OTP (One-Time Password)
+-   ✅ Profile management lengkap
+-   ✅ Reset password self-service
+-   ✅ Two-factor authentication (2FA)
+-   ✅ Riwayat login dan aktivitas
 
-## Laravel Sponsors
+### 2. **Pemesanan Tes Kesehatan**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+-   ✅ Pilih jenis tes dari katalog lengkap
+-   ✅ Sistem slot booking otomatis
+-   ✅ Validasi persyaratan dokumen
+-   ✅ Upload KTM, bukti pembayaran, dan dokumen lainnya
+-   ✅ Konfirmasi pemesanan dengan QR code
+-   ✅ Notifikasi email otomatis
 
-### Premium Partners
+### 3. **Tracking & Monitoring**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+-   ✅ Status real-time pemesanan (Pending, Approved, Completed, etc)
+-   ✅ Dashboard dengan statistik lengkap
+-   ✅ Timeline history perubahan status
+-   ✅ Notifikasi push dan email
+-   ✅ Export riwayat pemesanan
 
-## Contributing
+### 4. **Hasil Tes Digital**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   ✅ Upload hasil tes oleh klinik
+-   ✅ Validasi dan verifikasi hasil
+-   ✅ Format digital PDF/image
+-   ✅ Download hasil untuk keperluan lainnya
+-   ✅ Arsip hasil selamanya
 
-## Code of Conduct
+### 5. **Manajemen Admin**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   ✅ Dashboard analytics komprehensif
+-   ✅ Kelola jenis tes dan harga
+-   ✅ Atur jadwal dan slot ketersediaan
+-   ✅ Kelola dokumen persyaratan
+-   ✅ Upload dan verifikasi hasil
+-   ✅ Laporan terstruktur
 
-## Security Vulnerabilities
+### 6. **Keamanan & Compliance**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   ✅ Enkripsi data end-to-end
+-   ✅ GDPR & regulasi privasi data
+-   ✅ Audit log lengkap
+-   ✅ Role-based access control (RBAC)
+-   ✅ Rate limiting & DDoS protection
+-   ✅ Backup otomatis harian
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🛠️ Teknologi yang Digunakan
+
+### Backend
+
+```
+Laravel 10.x          - Framework PHP modern
+MySQL 8.0            - Database relasional
+Laravel Sanctum       - API authentication
+Laravel Queue         - Job processing
+Redis                 - Caching & sessions
+Mailgun               - Email delivery service
+```
+
+### Frontend
+
+```
+Tailwind CSS 3.x     - Utility-first CSS framework
+Alpine.js            - Lightweight interactivity
+Blade Template       - Server-side templating
+Livewire             - Real-time components
+Chart.js             - Visualization dashboard
+```
+
+### DevOps & Tools
+
+```
+Laragon              - Local development environment
+Git                  - Version control
+Docker               - Containerization (optional)
+PHPUnit              - Unit testing
+GitHub Actions       - CI/CD pipeline
+```
+
+### External Services
+
+```
+Mailgun              - Email service
+AWS S3               - File storage (optional)
+Stripe/Midtrans      - Payment gateway (future)
+Twilio               - SMS gateway (optional)
+```
+
+---
+
+## 🚀 Instalasi
+
+### Prerequisites
+
+Sebelum memulai, pastikan Anda sudah memiliki:
+
+-   **PHP 8.1+** ([Download](https://www.php.net/downloads))
+-   **Composer** ([Download](https://getcomposer.org/))
+-   **Node.js 16+** ([Download](https://nodejs.org/))
+-   **MySQL 8.0+** ([Download](https://www.mysql.com/))
+-   **Git** ([Download](https://git-scm.com/))
+-   **Laragon** ([Download](https://laragon.org/)) - Optional tapi recommended
+
+### Step 1: Clone Repository
+
+```bash
+# Clone dari repository
+git clone https://github.com/yourusername/vitacheck-unila.git
+
+# Masuk ke direktori proyek
+cd vitacheck-unila
+```
+
+### Step 2: Install Dependencies
+
+```bash
+# Install PHP dependencies
+composer install
+
+# Install Node.js dependencies
+npm install
+
+# Compile assets
+npm run dev
+```
+
+### Step 3: Setup Environment
+
+```bash
+# Copy file environment
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+```
+
+### Step 4: Database Setup
+
+```bash
+# Buat database baru
+# Buka MySQL dan jalankan: CREATE DATABASE vitacheck_unila;
+
+# Run migrations
+php artisan migrate
+
+# Seed data awal
+php artisan db:seed
+```
+
+### Step 5: Storage Link
+
+```bash
+# Create symbolic link untuk file uploads
+php artisan storage:link
+```
+
+### Step 6: Queue Setup (Optional)
+
+```bash
+# Jalankan queue worker untuk email/notifikasi
+php artisan queue:work --daemon
+```
+
+### Step 7: Jalankan Application
+
+```bash
+# Development server
+php artisan serve
+
+# Akses di browser: http://localhost:8000
+```
+
+---
+
+## ⚙️ Konfigurasi
+
+### File Konfigurasi Utama
+
+#### `.env` - Environment Variables
+
+```env
+APP_NAME="VitaCheck Unila"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+# Database Configuration
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=vitacheck_unila
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Mail Configuration
+MAIL_MAILER=mailgun
+MAIL_HOST=smtp.mailgun.org
+MAIL_PORT=587
+MAIL_USERNAME=your-mailgun-username
+MAIL_PASSWORD=your-mailgun-password
+MAILGUN_DOMAIN=your-mailgun-domain
+MAILGUN_SECRET=your-mailgun-secret
+
+# File Storage
+FILESYSTEM_DISK=local
+# Untuk production: aws, spaces, dll
+
+# Queue Configuration
+QUEUE_CONNECTION=sync
+# Untuk production: redis, database, dll
+
+# Redis Cache (Optional)
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
+
+#### `config/app.php` - Konfigurasi Aplikasi
+
+```php
+return [
+    'name' => env('APP_NAME', 'VitaCheck Unila'),
+    'env' => env('APP_ENV', 'production'),
+    'debug' => env('APP_DEBUG', false),
+    'url' => env('APP_URL', 'http://localhost'),
+    'timezone' => 'Asia/Jakarta',
+    'locale' => 'id',
+    'fallback_locale' => 'id',
+];
+```
+
+#### `config/auth.php` - Konfigurasi Autentikasi
+
+```php
+return [
+    'defaults' => [
+        'guard' => 'web',
+        'passwords' => 'users',
+    ],
+
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
+    ],
+
+    'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+    ],
+];
+```
+
+---
+
+## 📖 Penggunaan
+
+### Untuk Mahasiswa
+
+#### 1. Registrasi
+
+```
+1. Klik "Daftar Gratis" di halaman beranda
+2. Isi email kampus dan password
+3. Verifikasi email
+4. Login dengan kredensial Anda
+```
+
+#### 2. Buat Pemesanan Baru
+
+```
+1. Masuk ke Dashboard
+2. Klik "Pesan Tes Kesehatan"
+3. Pilih jenis tes yang diinginkan
+4. Pilih tanggal dan slot waktu
+5. Upload dokumen persyaratan (KTM, bukti pembayaran)
+6. Konfirmasi pemesanan
+7. Tunggu approval dari klinik
+```
+
+#### 3. Lacak Status
+
+```
+1. Buka Dashboard
+2. Lihat daftar pemesanan dengan status real-time
+3. Klik pada pemesanan untuk melihat detail
+4. Download hasil jika sudah tersedia
+```
+
+### Untuk Admin Klinik
+
+#### 1. Kelola Jadwal Tes
+
+```
+Navigasi: Admin > Tes & Jadwal > Kelola Jadwal
+- Tentukan tanggal dan waktu tes
+- Set jumlah slot per sesi
+- Assign staf medis
+```
+
+#### 2. Review Pemesanan
+
+```
+Navigasi: Admin > Pemesanan > Review
+- Lihat dokumen yang diunggah
+- Approve atau reject pemesanan
+- Kirim notifikasi ke mahasiswa
+```
+
+#### 3. Input Hasil Tes
+
+```
+Navigasi: Admin > Hasil > Upload Hasil
+- Pilih pemesanan yang sudah selesai
+- Upload file hasil (PDF/Image)
+- Verifikasi dan publish hasil
+```
+
+#### 4. Generate Laporan
+
+```
+Navigasi: Admin > Laporan
+- Laporan harian/mingguan/bulanan
+- Export ke Excel/PDF
+- Analisis statistik kesehatan
+```
+
+---
+
+## 🙏 Terima Kasih
+
+Terima kasih telah menggunakan VitaCheck Unila. Kami terus berinovasi untuk memberikan layanan terbaik bagi mahasiswa Universitas Lampung.
+
+**Dibuat dengan ❤️ untuk kesehatan mahasiswa Universitas Lampung**
+
+---
+
+## 📚 Referensi & Resources
+
+-   [Laravel Documentation](https://laravel.com/docs)
+-   [Tailwind CSS](https://tailwindcss.com/)
+-   [MySQL Documentation](https://dev.mysql.com/doc/)
+-   [RESTful API Best Practices](https://restfulapi.net/)
+-   [OWASP Security Guidelines](https://owasp.org/)
+
+---
+
+**Last Updated:** Desember 2025
+**Version:** 1.0.0

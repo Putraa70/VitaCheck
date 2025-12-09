@@ -17,13 +17,30 @@
 </div>
 
 @if($p->status === 'menunggu_bayar' && $p->kedaluwarsa_pada && now()->lt($p->kedaluwarsa_pada))
-  <div class="mb-4 rounded-xl bg-amber-50 text-amber-800 ring-1 ring-amber-200 px-4 py-3 text-sm flex items-center justify-between">
+  <div
+    class="mb-4 rounded-xl bg-amber-50 text-amber-800 ring-1 ring-amber-200 px-4 py-3 text-sm
+           flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
     <div>
-      Menunggu pembayaran. Batas waktu: {{ $p->kedaluwarsa_pada->format('d M Y H:i') }} WIB
+      Menunggu pembayaran. Batas waktu:
+      {{ \Illuminate\Support\Carbon::parse($p->kedaluwarsa_pada)->format('d M Y H:i') }} WIB
     </div>
-    <a href="{{ route('pemesanan.lihat',$p->kode) }}" class="underline text-amber-900">Refresh</a>
+
+    <div class="flex items-center gap-2">
+      <a href="{{ route('pemesanan.lihat',$p->kode) }}"
+         class="underline text-amber-900">
+        Refresh
+      </a>
+
+      {{-- Tombol lanjut bayar --}}
+      <x-primary-button as="a"
+        href="{{ route('pemesanan.bayar.lanjut', $p->kode) }}">
+        Bayar Sekarang
+      </x-primary-button>
+    </div>
   </div>
 @endif
+
 @if($p->status === 'kedaluwarsa')
   <div class="mb-4 rounded-xl bg-rose-50 text-rose-700 ring-1 ring-rose-200 px-4 py-3 text-sm">
     Pembayaran kedaluwarsa. Silakan pesan ulang.
@@ -57,7 +74,12 @@
     <div>
       <dt class="text-gray-500">Tanggal Slot</dt>
       <dd class="mt-1">
-        {{ optional($p->slotWaktu?->tanggal)->translatedFormat('l, d M Y') ?? '-' }}
+        @if($p->slotWaktu?->tanggal)
+          {{ \Illuminate\Support\Carbon::parse($p->slotWaktu->tanggal)->translatedFormat('l, d M Y') }}
+        @else
+          -
+        @endif
+
         @if($p->slotWaktu?->mulai && $p->slotWaktu?->selesai)
           • {{ $p->slotWaktu->mulai }}–{{ $p->slotWaktu->selesai }}
         @endif
@@ -73,7 +95,7 @@
     </div>
     <div>
       <dt class="text-gray-500">Dibuat</dt>
-      <dd class="mt-1">{{ optional($p->created_at)->format('d M Y H:i') }}</dd>
+      <dd class="mt-1">{{ $p->created_at ? $p->created_at->format('d M Y H:i') : '-' }}</dd>
     </div>
     <div>
       <dt class="text-gray-500">Waktu Dibayar</dt>
@@ -115,23 +137,30 @@
     </div>
   @endif
 
-  {{-- Berkas --}}
-  <div class="pt-4 border-t">
-    <h3 class="font-semibold mb-3">Berkas</h3>
-    <ul class="space-y-2 text-sm">
-      @forelse($p->berkasPemesanan as $b)
-        <li class="flex items-center justify-between">
-          <div>
-            <div class="font-medium">{{ strtoupper($b->jenis) }}</div>
-            <div class="text-gray-500">{{ $b->lokasi_berkas }}</div>
-          </div>
-          <a href="{{ $b->lokasi_berkas }}" target="_blank" class="text-indigo-600 hover:underline">Lihat</a>
-        </li>
-      @empty
-        <li class="text-gray-500">Belum ada berkas.</li>
-      @endforelse
-    </ul>
-  </div>
+{{-- Berkas --}}
+<div class="pt-4 border-t">
+  <h3 class="font-semibold mb-3">Berkas</h3>
+  <ul class="space-y-2 text-sm">
+    @forelse($p->berkasPemesanan as $b)
+      <li class="flex items-center justify-between">
+        <div>
+          <div class="font-medium">{{ strtoupper($b->jenis) }}</div>
+          <div class="text-gray-500">{{ $b->lokasi_berkas }}</div>
+        </div>
+        {{-- gunakan route khusus berkas --}}
+        <a href="{{ route('pemesanan.berkas', $b) }}"
+           target="_blank"
+           class="text-indigo-600 hover:underline">
+          Lihat
+        </a>
+      </li>
+    @empty
+      <li class="text-gray-500">Belum ada berkas.</li>
+    @endforelse
+  </ul>
+</div>
+
+
 
   {{-- Hasil Tes --}}
   <div class="pt-4 border-t">
@@ -145,9 +174,15 @@
         <div>
           <dt class="text-gray-500">Berkas Hasil</dt>
           <dd class="mt-1">
-            @if($p->hasilTes->berkas_hasil)
-              <a href="{{ $p->hasilTes->berkas_hasil }}" target="_blank" class="text-indigo-600 hover:underline">Unduh</a>
-            @else
+ @if($p->hasilTes->berkas_hasil)
+  <a href="{{ route('pemesanan.hasil', $p->hasilTes) }}"
+     target="_blank"
+     class="text-indigo-600 hover:underline">
+    Unduh
+  </a>
+@else
+
+
               <span class="text-gray-500">-</span>
             @endif
           </dd>

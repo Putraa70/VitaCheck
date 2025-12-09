@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\HasilTes;
 
 class PemesananController extends Controller
 {
@@ -169,9 +170,6 @@ class PemesananController extends Controller
 
     /**
      * SUKSES PEMBAYARAN (DEV TANPA WEBHOOK)
-     * - dipanggil dari Snap JS / callback
-     * - update kuota slot & status pemesanan
-     * - set antrian & QR
      */
     public function sukses(Request $r, AntrianService $antrian)
     {
@@ -221,5 +219,54 @@ class PemesananController extends Controller
         return redirect()
             ->route('pemesanan.lihat', $pemesanan->kode)
             ->with('sukses', 'Pembayaran berhasil, pemesanan sudah ditandai terbayar.');
+    }
+
+    /**
+     * USER: lihat / download berkas pemesanan miliknya sendiri.
+     */
+    public function lihatBerkas(BerkasPemesanan $berkas)
+    {
+        // pastikan hanya pemilik pemesanan yang boleh akses
+        $pemesanan = $berkas->pemesanan; // pastikan relasi ada di model BerkasPemesanan
+
+        if (! $pemesanan || $pemesanan->pengguna_id !== auth()->id()) {
+            abort(403, 'Anda tidak berhak mengakses berkas ini.');
+        }
+
+        $path = $berkas->lokasi_berkas;
+
+        if (! Storage::disk('public')->exists($path)) {
+            abort(404, 'Berkas tidak ditemukan.');
+        }
+
+        // tampilkan langsung di browser (PDF / gambar)
+        return response()->file(
+            Storage::disk('public')->path($path)
+        );
+
+        // kalau mau force download:
+        // return Storage::disk('public')->download($path);
+    }
+
+    public function lihatHasil(HasilTes $hasilTes)
+    {
+        // Pastikan hasil ini milik user yang sedang login
+        $pemesanan = $hasilTes->pemesanan;   // pastikan relasi ada di model HasilTes
+
+        if (! $pemesanan || $pemesanan->pengguna_id !== auth()->id()) {
+            abort(403, 'Anda tidak berhak mengakses berkas hasil ini.');
+        }
+
+        $path = $hasilTes->berkas_hasil;
+
+        if (! $path || ! Storage::disk('public')->exists($path)) {
+            abort(404, 'Berkas hasil tes tidak ditemukan.');
+        }
+
+        // ➜ kalau mau langsung download:
+        return Storage::disk('public')->download($path);
+
+        // kalau mau ditampilkan di browser:
+        // return response()->file(Storage::disk('public')->path($path));
     }
 }

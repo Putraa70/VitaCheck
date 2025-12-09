@@ -15,18 +15,33 @@ use App\Http\Controllers\Payment\MidtransWebhookController;
 use App\Http\Controllers\Admin\CheckinController;
 use App\Http\Controllers\Admin\HasilTesController;
 use App\Http\Controllers\Admin\PemesananQrController;
+use App\Models\HasilTes;
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Admin\UserAdminController;
+
+
 
 /** PUBLIC */
 Route::view('/', 'beranda')->name('beranda');
 
+
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])
+    ->name('auth.google.redirect');
+
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
+    ->name('auth.google.callback');
+
 /** DASHBOARD */
 /** DASHBOARD */
 Route::middleware(['auth'])->group(function () {
+
     // Pakai controller agar data terkirim
     Route::get('/dasbor', [DashboardController::class, 'index'])->name('dasbor');
 
     // (Opsional) /dashboard diarahkan ke /dasbor biar konsisten
     Route::redirect('/dashboard', '/dasbor')->name('dashboard');
+
+
 
     // Pemesanan
     Route::get('/pemesanan',          [PemesananController::class, 'indeks'])->name('pemesanan.indeks');
@@ -36,12 +51,24 @@ Route::middleware(['auth'])->group(function () {
     // 🔹 PENTING: route sukses HARUS sebelum {kode}
     Route::get('/pemesanan/sukses',   [PemesananController::class, 'sukses'])->name('pemesanan.sukses');
 
+    Route::get('/pemesanan/berkas/{berkas}', [PemesananController::class, 'lihatBerkas'])
+        ->name('pemesanan.berkas');
+
     Route::get('/pemesanan/{kode}',   [PemesananController::class, 'lihat'])->name('pemesanan.lihat');
     Route::post('/pemesanan/checkout', [PemesananController::class, 'checkout'])->name('pemesanan.checkout');
 
     Route::get('/pemesanan/{pemesanan}/qr', [PemesananQrController::class, 'show'])
         ->name('pemesanan.qr');
 
+    Route::get('/pemesanan/{kode}/bayar', [PemesananController::class, 'bayarLanjut'])
+        ->name('pemesanan.bayar.lanjut');
+
+    Route::get('/pemesanan/hasil/{hasilTes}', [PemesananController::class, 'lihatHasil'])
+        ->name('pemesanan.hasil');
+
+    // callback sukses (dev tanpa webhook)
+    Route::get('/pemesanan/sukses', [PemesananController::class, 'sukses'])
+        ->name('pemesanan.sukses');
     // Profil
     Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
@@ -79,6 +106,10 @@ Route::prefix('admin')
             ->name('pemesanans.show')
             ->whereUuid('pemesanan');
 
+        Route::get('/pemesanans/berkas/{berkas}', [PemesananAdminController::class, 'lihatBerkas'])
+            ->name('pemesanans.berkas.show');
+
+
         Route::post('pemesanan/{pemesanan}/status', [PemesananAdminController::class, 'perbaruiStatus'])
             ->name('pemesanans.perbarui_status')
             ->whereUuid('pemesanan');
@@ -88,15 +119,25 @@ Route::prefix('admin')
             ->name('pemesanans.qr')
             ->whereUuid('pemesanan');
 
+        Route::get('pemesanan/{pemesanan}/qr/download', [PemesananQrController::class, 'download'])
+            ->name('pemesanans.qr.download')
+            ->whereUuid('pemesanan');
+
+        Route::post('pemesanan/{pemesanan}/hasil', [HasilTesController::class, 'store'])
+            ->name('pemesanans.hasil.store')
+            ->whereUuid('pemesanan');
+
+        Route::resource('users', UserAdminController::class)
+            ->except(['show']) // ⬅️ tambahkan ini
+            ->names('users')
+            ->parameters(['users' => 'user']);
+
+        Route::get('users/{user}', [UserAdminController::class, 'show'])
+            ->name('users.show');
 
         // Checkin scan
         Route::post('checkin', [CheckinController::class, 'scan'])
             ->name('checkin.scan');
-
-        // Hasil tes (lebih rapi kalau juga di dalam group admin)
-        Route::post('pemesanan/{pemesanan}/hasil', [HasilTesController::class, 'store'])
-            ->name('pemesanans.hasil.store')
-            ->whereUuid('pemesanan');
     });
 
 require __DIR__ . '/auth.php';
