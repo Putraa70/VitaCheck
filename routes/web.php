@@ -9,11 +9,11 @@ use App\Http\Controllers\Admin\{
     FakultasAdminController,
     ProgramStudiAdminController,
     PemesananAdminController
+    
 };
 use App\Http\Controllers\ProfileController;
 
-/** PUBLIC */
-Route::view('/', 'beranda')->name('beranda');
+
 
 /** DASHBOARD */
 Route::middleware(['auth'])->group(function () {
